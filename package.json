@@ -1,0 +1,31 @@
+{
+  "name": "defi-terminal",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/api",
+    "apps/web"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test \"packages/**/*.test.ts\" \"apps/**/*.test.ts\"",
+    "api": "node --env-file-if-exists=.env apps/api/src/main.ts",
+    "smoke": "node scripts/smoke-venue.ts",
+    "verify-oi": "node scripts/verify-oi-convention.ts",
+    "collect": "node scripts/run-collector.ts",
+    "scan": "node scripts/run-scanner.ts",
+    "backup": "node scripts/backup.ts",
+    "telegram-id": "node --env-file-if-exists=.env scripts/telegram-chat-id.ts"
+  },
+  "devDependencies": {
+    "@types/node": "26.5.0",
+    "typescript": "7.0.2"
+  },
+  "overrides": {
+    "source-map-js": "1.2.2"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@defi/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@defi/core": "*",
+    "@defi/venues": "*",
+    "@defi/collector": "*",
+    "@defi/storage": "*",
+    "@defi/scanner": "*",
+    "@defi/sources": "*"
+  }
+}

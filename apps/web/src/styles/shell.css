@@ -1,0 +1,1709 @@
+/*
+ * Estructura del shell. Los valores vienen de tokens.css: aqui no hay ni un
+ * color ni un espaciado suelto.
+ */
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* --- Barra superior --- */
+
+/* Todo centrado respecto a la pagina: marca arriba, pestanas debajo ocupando
+   el ancho. Con 13 pestanas en letra grande no caben siempre en una linea, asi
+   que parten en dos, centradas, en vez de hacer scroll horizontal. */
+.topbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Aire entre la marca y las pestanas: pedido expresamente. */
+  gap: var(--s5);
+  padding: var(--s6) var(--s5) var(--s4);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.brand {
+  color: var(--text);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.topbar nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s3);
+  width: 100%;
+}
+
+.tab {
+  padding: var(--s2) var(--s4);
+  color: var(--text-dim);
+  border-bottom: var(--rule-strong) solid transparent;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tab:hover { color: var(--text); text-decoration: none; }
+
+.tab-active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+/* --- Barra de estado: lo que hay que saber siempre, sin ocupar sitio. --- */
+
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: var(--s5);
+  padding: var(--s2) var(--s4);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-label);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* --- Contenido --- */
+
+main {
+  padding: var(--s4);
+  flex: 1;
+  /* Ancho maximo generoso: son tablas densas, no prosa. */
+  max-width: 1800px;
+  width: 100%;
+  margin-inline: auto;
+}
+
+
+.screen-intro strong { color: var(--text); font-weight: 400; }
+
+.section-heading {
+  margin: var(--s5) 0 var(--s2);
+  text-align: center;
+}
+
+.section-heading:first-child { margin-top: 0; }
+
+.sub { font-size: var(--fs-label); }
+
+.reason { max-width: 40ch; white-space: normal; margin-inline: auto; }
+
+/* --- Que pestanas alimenta cada fuente. Texto compacto, no chips: los venues
+   alimentan todos las mismas siete y en chips serian tres lineas de ruido
+   repetido por fila. --- */
+
+.feeds {
+  max-width: 46ch;
+  margin-inline: auto;
+  white-space: normal;
+  font-size: var(--fs-label);
+  line-height: 1.35;
+}
+
+/* Critico = sin esta fuente la pestana no tiene nada que mostrar. Se distingue
+   por contraste y por la palabra, no solo por color. */
+.feed-critical { color: var(--text); }
+.crit-mark { color: var(--accent); }
+
+/* --- Cifras de cabecera. Cuatro numeros, sin adornos: una etiqueta pequena y
+   el dato en alto contraste. --- */
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: var(--s1);
+  margin-bottom: var(--s4);
+  flex-wrap: wrap;
+}
+
+.stat {
+  flex: 1 1 160px;
+  padding: var(--s2) var(--s3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  margin-top: var(--s1);
+}
+
+/* --- Controles --- */
+
+/* Los grupos de control se apinaban unos contra otros y costaba ver donde
+   acababa uno y empezaba el siguiente. Ahora respiran, y van dentro de su
+   propia banda para que se lean como una barra de mandos y no como texto
+   suelto encima de la tabla. */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--s4) var(--s7);
+  flex-wrap: wrap;
+  padding: var(--s4) var(--s5);
+  margin-bottom: var(--s5);
+  border: var(--rule) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.controls label,
+.control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s2);
+}
+
+/* Lo ancho va en su propia linea y centrado respecto a la PAGINA. Antes el
+   buscador se estiraba dentro de la fila y se comia el hueco sobrante, asi que
+   "Period" acababa pegado al borde izquierdo y el campo quedaba a la derecha
+   del centro por mucho que la fila estuviese centrada. */
+.controls .grow {
+  flex: 1 0 100%;
+}
+
+/* Adelantarse a la primera fila solo lo hace el BUSCADOR, que es por donde se
+   empieza. En un formulario no: alli reordenar los campos deja la nota encima
+   del importe y se lee al reves de como se rellena. */
+.controls .grow:has(> input[type='search']) {
+  order: -1;
+}
+
+.controls .grow > input,
+.controls .grow > select {
+  width: 100%;
+  max-width: 340px;
+}
+
+.controls input,
+.controls select { min-width: 0; }
+
+/* Segmentado en lugar de deslizador: en un dato que cambia el signo del
+   resultado, un valor discreto y legible vale mas que uno continuo que hay que
+   adivinar arrastrando. */
+.segmented { display: flex; justify-content: center; gap: var(--s2); flex-wrap: wrap; }
+
+.seg {
+  padding: var(--s2) var(--s4);
+  color: var(--text-dim);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.seg-active {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.seg-active:hover { background: var(--accent); }
+.seg-clear { color: var(--text-faint); border-style: dashed; }
+
+/* --- Tabla del scanner --- */
+
+.asset { color: var(--text); }
+.leg-rate { font-size: var(--fs-label); }
+.loading-note { margin: var(--s2) 0 0; font-size: var(--fs-label); }
+
+/* --- Barras de proporcion. Sin color propio: el acento ya significa "esto es
+   lo interactivo", asi que aqui la barra usa un gris y la magnitud la da la
+   longitud, no el tono. --- */
+
+.bar {
+  display: block;
+  height: 6px;
+  min-width: 80px;
+  background: var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: var(--radius-sm);
+}
+
+.clickable { cursor: pointer; }
+
+/* Solo la celda que envuelve el desglose va sin relleno. Con `.detail-row td`
+   a secas tambien perdian el relleno las celdas de la tabla anidada, y el
+   desglose salia con las filas pegadas unas a otras. */
+.detail-row > td { padding: 0; background: var(--bg); }
+
+/* La tabla anidada es la unica excepcion al "un solo nivel de superficie": es
+   el desglose del par abierto, y va sobre el fondo para que se distinga de las
+   filas normales sin anadir un tercer tono. Letra algo menor que la fila de
+   arriba, pero con el mismo aire. */
+.detail { margin: 0; }
+.detail thead th { background: var(--bg); border-bottom-color: var(--border); padding: var(--s3) var(--s4); font-size: var(--fs-label); }
+.detail tbody td { padding: var(--s3) var(--s4); font-size: var(--fs-head); }
+.detail tbody td a { font-weight: 700; }
+.detail .nativo { color: var(--text-dim); font-family: var(--font-mono); }
+.detail-relacionados { padding: var(--s3) var(--s4); border-bottom: var(--rule) solid var(--border); }
+
+.stat-inline { font-variant-numeric: tabular-nums; padding: var(--s1) 0; }
+
+/* Aviso dentro de una celda: mismo ambar del semaforo, sin punto, porque aqui
+   el contexto de la columna ya dice de que se esta avisando. */
+.warn-text { color: var(--warn); }
+
+/* --- Graficos --- */
+
+.chart-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: var(--s2);
+}
+
+.chart { width: 100%; }
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: var(--s4);
+  flex-wrap: wrap;
+  margin-top: var(--s2);
+  font-size: var(--fs-label);
+  color: var(--text-dim);
+}
+
+.legend-item { display: inline-flex; align-items: center; gap: var(--s1); }
+
+.legend-dot { width: 8px; height: 2px; display: inline-block; }
+
+.vs { align-self: center; font-size: var(--fs-label); }
+
+.history { padding: var(--s3) var(--s5) var(--s4); }
+.history .label { margin-bottom: var(--s2); }
+
+.notes { font-size: var(--fs-label); max-width: 30ch; white-space: normal; margin-inline: auto; }
+
+.desc { max-width: 52ch; white-space: normal; margin-inline: auto; }
+
+/* Campo editable dentro de una celda numerica: se ve como dato hasta que se
+   toca, para que la tabla no parezca un formulario. */
+.inline-num {
+  width: 8ch;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  background: transparent;
+  border-color: transparent;
+  padding: 0 var(--s1);
+}
+
+.inline-num:hover, .inline-num:focus { border-color: var(--border-strong); background: var(--surface); }
+
+/* Marco del unico contenido de terceros de la app (ver Calendar.tsx). Se le
+   da un borde propio para que se vea donde acaba lo nuestro y empieza lo
+   embebido, y una altura fija para que la pagina no salte al cargar. */
+.embed-frame {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius);
+  height: 640px;
+  overflow: hidden;
+}
+
+.embed-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* Detalle de procedencia de una fila del scanner. Denso a proposito: es para
+   comprobar numeros, no para leerlo de corrido. */
+.prov {
+  background: var(--surface);
+  border-left: 2px solid var(--accent);
+  padding: var(--s3) var(--s4);
+}
+
+.prov-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--s4);
+  margin-bottom: var(--s3);
+}
+
+.prov-leg .label { margin-bottom: var(--s1); }
+
+.prov-line {
+  line-height: 1.6;
+  margin-bottom: var(--s1);
+}
+
+.prov-line code {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 var(--s1);
+}
+
+.prov-line .label { display: inline; margin-right: var(--s1); }
+
+/* Cambios de tamano de una posicion, bajo el nocional inicial. */
+.size-changes {
+  font-size: var(--fs-label);
+  line-height: 1.5;
+}
+
+/* --- Screener de funding --- */
+
+.view-switch { margin-bottom: var(--s4); }
+
+.screener-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s5);
+  margin-bottom: var(--s3);
+  font-variant-numeric: tabular-nums;
+}
+
+.screener-meta .label { display: inline; }
+
+.cycle { display: inline-flex; align-items: center; gap: var(--s2); }
+
+.cycle-bar {
+  display: inline-block;
+  width: 60px;
+  height: 2px;
+  background: var(--border);
+}
+
+.cycle-bar span { display: block; height: 100%; background: var(--ok); }
+
+/* Cabeceras de columna (Symbol, Max arb, cada venue) y columna de simbolos:
+   grandes, gruesas y en contraste alto, pedido expresamente. Son lo que se
+   busca con la vista antes de leer ninguna cifra. La unidad de debajo sigue
+   pequena para no competir con el nombre. */
+.screener thead th {
+  vertical-align: middle;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: 0.06em;
+  padding-block: var(--s3);
+}
+.screener th .sub {
+  font-size: var(--fs-label);
+  font-weight: 400;
+  color: var(--text-dim);
+  margin-top: 2px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.screener td { font-variant-numeric: tabular-nums; }
+
+.symbol-cell { font-weight: 800; font-size: 18px; letter-spacing: 0.02em; }
+
+.arb-col { background: var(--bg); }
+.arb-value { color: var(--ok); font-size: 14px; }
+
+/* Columna de lo sostenido: fina a proposito, pegada al arbitraje.
+   Las dos se leen juntas, cuanto paga y si aguanta, y darle el ancho de una
+   columna de venue haria pensar que es otro venue mas. */
+.sust-col {
+  background: var(--bg);
+  width: 1%;
+  white-space: nowrap;
+  padding-left: var(--s2);
+  padding-right: var(--s2);
+}
+
+/* La letra sola, sin recuadro ni relleno: el color ya dice el estado y una
+   caja mas en una tabla que ya tiene muchas seria ruido. */
+.sust { font-weight: 800; font-size: 15px; letter-spacing: 0.02em; }
+.sust-a { color: var(--ok); }
+.sust-b { color: var(--text); }
+.sust-c { color: var(--warn); }
+.sust-d { color: var(--text-faint); }
+
+.cell-long { background: var(--long-bg); }
+.cell-short { background: var(--short-bg); }
+
+/* Etiqueta LONG / SHORT: borde y texto del color del estado, sin relleno, para
+   que no compita con la cifra de al lado. */
+.side {
+  display: inline-block;
+  margin-right: var(--s2);
+  padding: 0 var(--s1);
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  vertical-align: 1px;
+}
+
+.side-long { color: var(--ok); }
+.side-short { color: var(--bad); }
+
+.star-col { width: 36px; }
+
+.star {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-faint);
+  font-size: 14px;
+}
+
+.star-on { color: var(--accent); }
+
+
+.dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  vertical-align: 1px;
+  background: var(--text-faint);
+}
+
+.dot-ok { background: var(--ok); }
+.dot-degraded { background: var(--warn); }
+.dot-down { background: var(--bad); }
+
+/* --- Portada: la eleccion entre las tres areas --- */
+
+/* --- Portada ---
+
+   Centrada en horizontal y colocada ARRIBA, no en el centro vertical: con las
+   tarjetas a media altura y nada debajo, la pagina parecia un formulario de
+   login. Van arriba y debajo va el estado del sistema, que es lo que la llena
+   sin inventarse un adorno. */
+
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s7);
+  /* Ocupa lo que queda bajo la cabecera y centra ahi dentro, pero el relleno
+     inferior es mayor que el superior, asi que el bloque queda por encima del
+     centro optico. Centrado del todo parecia un formulario de login; pegado
+     arriba dejaba un palmo muerto debajo. */
+  min-height: calc(100vh - 190px);
+  padding: var(--s6) 0 var(--s7);
+}
+
+.home-areas {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--s5);
+}
+
+.home-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s3);
+  width: 360px;
+  min-height: 190px;
+  padding: var(--s6) var(--s5);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  text-align: center;
+}
+
+.home-card:hover {
+  border-color: var(--accent);
+  background: var(--surface-hover);
+  text-decoration: none;
+}
+
+.home-title {
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+/* --- Barra superior por area --- */
+
+.topbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s4);
+  position: relative;
+  width: 100%;
+}
+
+/* Home va SIEMPRE arriba a la izquierda, en su casilla y grande. Pedido
+   expresamente, y por eso es lo unico de la cabecera que no va centrado: se
+   saca del flujo con posicion absoluta para que la marca siga centrada
+   respecto a la pagina entera y no respecto al hueco que deje el boton. */
+.home-link {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: var(--s2) var(--s4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.home-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--surface-hover);
+}
+
+/* En pantalla estrecha la casilla y la marca se pisarian. Sigue arriba a la
+   izquierda, pero en su propia linea y sin sacarla del flujo. */
+@media (max-width: 640px) {
+  .topbar-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s3);
+  }
+
+  .home-link {
+    position: static;
+    transform: none;
+  }
+
+  .topbar-row .brand {
+    align-self: center;
+  }
+}
+
+/* Punto detras del rotulo de una pestana aun sin construir: se ve que esta
+   ahi pero que todavia no lleva a ningun dato. */
+.tab-pending { color: var(--warn); }
+
+.estado-fuentes { color: inherit; }
+.estado-fuentes:hover { text-decoration: none; opacity: 0.85; }
+
+/* --- Desplegable de seleccion multiple (los venues del screener) --- */
+
+.menu-anclaje { position: relative; }
+
+.seg-menu { min-width: 110px; }
+
+.menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  margin-top: var(--s2);
+  /* Tan ancho como pida el nombre mas largo, para que cada fila quepa en una
+     linea ("Polymarket International" partia en dos), con tope de pantalla. */
+  width: max-content;
+  min-width: 320px;
+  max-width: min(92vw, 480px);
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: var(--s2);
+  border: var(--rule-strong) solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Buscador del desplegable. Ocupa todo el ancho del menu y va lo primero,
+   que es por donde se empieza cuando la lista no cabe de un vistazo. */
+.menu-buscar {
+  width: 100%;
+  margin-bottom: var(--s2);
+  text-align: center;
+}
+
+.menu-vacio {
+  padding: var(--s3) var(--s2);
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.menu-acciones {
+  display: flex;
+  gap: var(--s2);
+  padding-bottom: var(--s2);
+  margin-bottom: var(--s2);
+  border-bottom: var(--rule) solid var(--border);
+}
+
+.menu-acciones .seg { flex: 1; }
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  width: 100%;
+  padding: var(--s2) var(--s2);
+  border: none;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-dim);
+  text-align: left;
+  min-height: 34px;
+}
+
+.menu-item:hover { background: var(--surface-hover); }
+.menu-item-on { color: var(--text); }
+
+/* La marca va en una casilla de ancho fijo para que los nombres queden
+   alineados esten marcados o no. */
+.menu-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.menu-item-on .menu-check {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* El nombre, centrado y en una sola linea. Si aun asi no cabe, se corta con
+   puntos suspensivos en vez de partir la fila en dos. */
+.menu-label {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* La cifra de cada fila en su casilla de ancho fijo: todas quedan alineadas y
+   centradas en la misma columna, midan lo que midan. */
+.menu-cifra {
+  flex: none;
+  min-width: 84px;
+  padding: 2px var(--s2);
+  border: var(--rule) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--panel-soft);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  text-align: center;
+  white-space: nowrap;
+}
+.menu-item-on .menu-cifra { color: var(--text); border-color: var(--border-strong); }
+
+/* --- Separacion vertical entre columnas del screener ---
+   Una raya fina entre columnas: con once venues, seguir una fila de punta a
+   punta sin ellas es adivinar a que columna pertenece cada cifra. */
+.screener-table tbody td + td,
+.screener-table thead th + th {
+  border-left: var(--rule) solid var(--border);
+}
+
+/* --- Columna anclada del screener ---
+   Con un solo venue elegido, su columna va la primera y se separa del resto
+   con la misma linea gruesa que la columna de simbolos: a su izquierda esta lo
+   que se compara, a su derecha las contrapartes. */
+.anchor-col { border-left: var(--rule-strong) solid var(--border-strong) !important; }
+
+/* Leyenda legible del historico de funding. */
+.history .legend { font-size: var(--fs-data); font-weight: 700; color: var(--text); }
+.history .legend-item {
+  padding: var(--s3) var(--s4);
+  border: var(--rule) solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  gap: var(--s2);
+  max-width: 100%;
+  white-space: normal;
+}
+.history .legend-dot { width: 32px; height: 6px; flex-shrink: 0; border-radius: var(--radius); }
+
+/* Paneles de Traders: una superficie por panel, sin cajas interiores. */
+.traders-screen { min-width: 0; }
+.traders-status, .trader-panel-heading, .trader-panel-picker {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: var(--s3);
+}
+.traders-status { margin-bottom: var(--s4); }
+.trader-panel-picker { gap: var(--s2); }
+.trader-panels {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s6); min-width: 0; align-items: stretch;
+}
+.trader-panel {
+  min-width: 0; border: var(--rule-strong) solid var(--border-strong);
+  border-radius: var(--radius); background: var(--surface);
+  padding: var(--s5); display: flex; flex-direction: column;
+}
+.trader-panel-wide { grid-column: 1 / -1; }
+.trader-panel-heading {
+  margin: 0 0 var(--s5); padding: 0;
+  flex-direction: column; gap: var(--s2);
+}
+.trader-panel .controls {
+  gap: var(--s3); padding: 0; border: 0; background: transparent;
+  border-radius: 0; box-shadow: none;
+}
+@media (max-width: 1000px) {
+  .trader-panels { grid-template-columns: minmax(0, 1fr); }
+}
+.trader-panel-heading h2 {
+  margin: 0; font-size: var(--fs-data); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.trader-panel .controls { margin-bottom: var(--s2); }
+.trader-empty {
+  padding: var(--s6) var(--s3); color: var(--text-dim); text-align: center;
+  flex: 1; display: grid; place-items: center;
+}
+.trader-panel button:disabled { opacity: 0.65; cursor: not-allowed; }
+
+/* --- Filas de los paneles de Traders ---
+   Rejilla, no tabla: la preferencia registrada para estos paneles es una sola
+   superficie por panel, sin tablas ni recuadros dentro del recuadro. */
+
+.trader-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  padding: var(--s3) 0;
+  border-bottom: var(--rule) solid var(--border);
+  flex-wrap: wrap;
+}
+
+.trader-row:last-child { border-bottom: none; }
+
+.trader-name { font-weight: 700; min-width: 10ch; }
+
+/* La direccion completa se ve, pero no manda: es lo que menos se lee. */
+.trader-addr { font-family: var(--font-mono); font-size: var(--fs-label); }
+
+.trader-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--border-strong);
+}
+
+/* Las posiciones de un trader van debajo de su cabecera, con sangria, para
+   que se vea de quien son sin repetir su nombre en cada linea. */
+.trader-block { padding-bottom: var(--s3); }
+.trader-row-head { border-bottom: var(--rule-strong) solid var(--border-strong); }
+.trader-pos { padding-left: var(--s5); }
+/* Centrada como todas: la anchura tabular es lo que las hace comparables,
+   no la alineacion. Era la unica columna a la derecha que quedaba. */
+.trader-pos .num { min-width: 9ch; text-align: center; }
+
+/* La lista de posiciones se queda dentro de su hueco y se recorre ahi.
+   Una cuenta con 177 posiciones abiertas empujaba los demas paneles metros
+   abajo, y para ver el siguiente habia que pasarselas todas. */
+.trader-scroll {
+  max-height: 380px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-top: var(--rule) solid var(--border);
+  padding-right: var(--s2);
+}
+
+/* La cabecera de cada grupo se queda a la vista mientras se recorre el grupo:
+   sin esto, a media lista ya no se sabe de quien es la fila que se mira. */
+.trader-scroll .trader-row-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface);
+}
+
+/* Dentro del hueco las filas van mas juntas: lo que se busca aqui es
+   comparar tamanos de un vistazo, no leer una por una. */
+.trader-scroll .trader-row { padding: var(--s2) 0; }
+
+/* El editor de filtros de una wallet ocupa la fila entera debajo de ella: son
+   dos campos y un boton, y metidos en la misma linea empujaban el resto. */
+.trader-filtros {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--s3);
+  padding: var(--s3);
+  border: var(--rule) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel-soft);
+}
+
+/* Lo que un trader NO esta ensenando y por que. Va fuera del hueco con barra
+   para que no se pierda al bajar. */
+.trader-note { border-bottom: none; justify-content: center; }
+
+/* --- Open Interest: bloques separados ---
+   Una pregunta por bloque, con aire de sobra entre ellos. Antes era un muro de
+   tablas pegadas donde no se veia donde acababa una y empezaba la siguiente. */
+
+.oi-pantalla {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s7);
+  min-width: 0;
+}
+
+.oi-bloque,
+.bloque {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s4);
+  min-width: 0;
+}
+
+/* Cabecera discreta: el titulo situa el bloque y el subtitulo matiza, sin
+   competir con las cifras, que son lo que se viene a mirar. */
+.oi-bloque-cabecera,
+.bloque-cabecera {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--s3);
+  flex-wrap: wrap;
+  padding-bottom: var(--s3);
+  border-bottom: var(--rule) solid var(--border);
+}
+
+.oi-bloque-cabecera h2,
+.bloque-cabecera h2 {
+  margin: 0;
+  font-size: var(--fs-data);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Las tablas de esta pantalla respiran mas que las del resto: son de leer de
+   un vistazo, no de escanear cien filas. */
+.oi-bloque table td,
+.oi-bloque table th { padding-top: var(--s3); padding-bottom: var(--s3); }
+
+/* Leyenda que enciende y apaga bandas. Son botones de verdad, no texto con
+   un manejador colgado: se llega con el teclado como a cualquier otro. */
+.oi-leyenda {
+  gap: var(--s2) var(--s4);
+}
+
+.oi-leyenda .legend-item {
+  border: none;
+  background: none;
+  padding: var(--s1) var(--s2);
+  cursor: pointer;
+  font-size: var(--fs-label);
+}
+
+.oi-leyenda .legend-item:hover { color: var(--text); }
+
+/* Apagada: tachada y apagada, para que se vea que sigue ahi y se puede volver
+   a encender, en vez de desaparecer de la lista. */
+.legend-off { opacity: 0.4; text-decoration: line-through; }
+
+/* Heatmap: la tabla se recorre dentro de su hueco y la cabecera se queda. */
+.oi-heatmap { max-height: 460px; overflow: auto; }
+.oi-heatmap thead th { position: sticky; top: 0; z-index: 1; background: var(--surface); }
+.oi-heatmap td { transition: none; }
+
+/* La columna del ratio es la conclusion de la tabla, no un protocolo mas.
+   Se separa con la misma linea gruesa que usan las tablas para marcar un
+   cambio de naturaleza, y con aire a los lados. */
+.ratio-col {
+  border-left: var(--rule-strong) solid var(--border-strong);
+  padding-left: var(--s5);
+  padding-right: var(--s4);
+  white-space: nowrap;
+}
+
+/* --- Favoritos dentro de un desplegable ---
+   La estrella va FUERA del elemento, como hermano: un boton dentro de otro no
+   es HTML valido, y pulsando la estrella se acabaria seleccionando el
+   elemento, que es justo lo que no se quiere. */
+.menu-fila {
+  display: flex;
+  align-items: center;
+  gap: var(--s1);
+  width: 100%;
+}
+
+.menu-fila .menu-item { flex: 1; min-width: 0; }
+
+.menu-fila .star {
+  flex: none;
+  width: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Se enciende al pasar por encima de la fila entera: con cien exchanges, una
+   estrella siempre visible en cada linea es ruido. La marcada se queda. */
+.menu-fila .star { opacity: 0; }
+.menu-fila:hover .star,
+.menu-fila .star-on,
+.menu-fila .star:focus-visible { opacity: 1; }
+
+/* Ficha de cada protocolo encima del comparador: lo que NO es un numero que se
+   pueda dividir entre el del otro, como la cadena, el colateral o si su
+   convencion de interes abierto esta verificada. */
+.oi-fichas {
+  display: flex;
+  justify-content: center;
+  gap: var(--s5);
+  flex-wrap: wrap;
+}
+
+.oi-ficha {
+  flex: 1 1 220px;
+  max-width: 320px;
+  padding: var(--s3) var(--s4);
+  border: var(--rule) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+
+.oi-ficha .label { color: var(--text); font-size: var(--fs-data); font-weight: 700; }
+
+/* Terminal: controles compactos con intervalos accesibles. */
+.terminal-intervals { display: flex; flex-wrap: wrap; gap: var(--s2); align-items: center; }
+.terminal-intervals [aria-pressed="true"] { border-color: var(--accent); font-weight: 700; }
+
+/* --- Terminal: el grafico a todo el ancho y las tablas debajo ---
+
+   Tuvo los mercados en una columna a la derecha. Se quitaron de ahi: 320 px
+   de lista le costaban al grafico una cuarta parte de la pantalla, y lo que se
+   viene a mirar es el grafico. Ahora la barra del mercado va arriba, como en
+   Hyperliquid, y mercados y libro debajo, uno al lado del otro. */
+
+.terminal-barra {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--s5);
+  padding-bottom: var(--s3);
+  border-bottom: var(--rule) solid var(--border);
+}
+
+.terminal-barra .stat { min-width: 0; padding: 0; border: none; background: none; }
+.terminal-barra .stat-value { font-size: 18px; }
+
+.terminal-periodo { width: 7ch; text-align: center; }
+
+.terminal-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s2);
+}
+
+.terminal-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: 0;
+  padding: 2px var(--s2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+}
+
+/* La leyenda va ENCIMA del grafico, arriba a la izquierda, como en
+   TradingView. No intercepta el raton: si lo hiciese, el cursor dejaria de
+   mover la cruz justo en la esquina donde se lee. */
+.candle-wrap { position: relative; }
+
+.candle-legend {
+  position: absolute;
+  top: var(--s2);
+  left: var(--s2);
+  z-index: 3;
+  max-width: calc(100% - 96px);
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.candle-legend span { margin-right: 6px; }
+.candle-legend-k { color: var(--text-dim); margin-right: 3px !important; }
+.candle-legend-titulo { color: var(--text); font-weight: 700; margin-right: 10px !important; }
+
+.terminal-bajo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr);
+  gap: var(--s4);
+  align-items: start;
+}
+
+.terminal-fills { max-height: 300px; overflow-y: auto; }
+.terminal-fills table { font-size: 12px; }
+.terminal-fills th { position: sticky; top: 0; z-index: 1; }
+
+.terminal-assets-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.terminal-assets-head input { width: 100%; }
+
+/* La lista se recorre DENTRO de su caja. Con 178 mercados, dejarla crecer
+   empujaba el resto de la pantalla metros hacia abajo. */
+.terminal-assets-list {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.terminal-assets-list table { font-size: 12px; }
+.terminal-assets-list th { position: sticky; top: 0; z-index: 1; }
+.terminal-assets-list td { padding: var(--s1) var(--s2); }
+
+/* El activo elegido: la caja entera, no solo el texto, porque la fila es lo
+   que se esta senalando. */
+.terminal-asset-on td { background: var(--panel); }
+.terminal-asset-on .terminal-asset { color: var(--text); font-weight: 700; }
+
+.terminal-asset {
+  border: none;
+  background: none;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  padding: 0;
+  min-height: 0;
+}
+
+.terminal-asset:hover { color: var(--accent); }
+
+/* --- Libro de ordenes ---
+
+   La barra de profundidad va DETRAS de las cifras, como una celda extra en
+   posicion absoluta. Se hace asi y no con un degradado de fondo para que su
+   ancho sea un dato y no un adorno: mide el acumulado hasta ese nivel sobre el
+   mayor de los dos lados. */
+
+.terminal-book {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.terminal-book table { font-size: 12px; width: 100%; }
+.terminal-book td, .terminal-book th { padding: 1px var(--s2); }
+.terminal-book tbody tr { position: relative; }
+
+.book-barra {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0;
+  pointer-events: none;
+  opacity: 0.14;
+}
+
+.book-ask .book-barra { background: var(--neg); }
+.book-bid .book-barra { background: var(--pos); }
+
+/* El diferencial parte el libro en dos y por eso lleva regla arriba y abajo:
+   es la frontera entre lo que se compra y lo que se vende. */
+.book-spread td {
+  border-top: var(--rule) solid var(--border-strong);
+  border-bottom: var(--rule) solid var(--border-strong);
+  padding: var(--s2);
+}
+
+@media (max-width: 1100px) {
+  .terminal-bajo { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* --- Tablero de Points: tarjetas que se arrastran para fijar la prioridad.
+   La posicion ES el dato: la primera es lo que mas importa farmear. --- */
+.tablero {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s3);
+}
+
+.tarjeta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s1);
+  min-width: 170px;
+  padding: var(--s3) var(--s4);
+  background: var(--surface);
+  border: var(--rule) solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: grab;
+  user-select: none;
+}
+
+.tarjeta:hover { border-color: var(--border-strong); }
+.tarjeta.arrastrando { opacity: 0.4; }
+.tarjeta.destino { border-color: var(--accent); }
+.tarjeta-rango { font-size: var(--fs-label); color: var(--text-faint); }
+.tarjeta-venue { font-size: 16px; font-weight: 700; }
+.tarjeta-premio { font-family: var(--font-mono); font-size: var(--fs-data); }
+.tarjeta-nota { font-size: var(--fs-label); color: var(--text-dim); max-width: 200px; text-align: center; }
+.tarjeta-quitar {
+  position: absolute;
+  top: var(--s1);
+  right: var(--s2);
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  padding: 0;
+}
+.tarjeta-quitar:hover { color: var(--bad); }
+
+/* --- Panel de datos de la portada. Arriba a la derecha, pedido asi: espejo
+   del boton Home de las areas, fuera del flujo para que la marca siga
+   centrada respecto a la pagina. --- */
+.panel-datos {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--s1);
+  padding: var(--s2) var(--s4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--fs-label);
+  z-index: 2;
+}
+.panel-datos:hover { border-color: var(--accent); text-decoration: none; }
+.panel-datos-titulo { font-size: 16px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.panel-datos-fallo { white-space: nowrap; }
+
+@media (max-width: 760px) {
+  .panel-datos { position: static; align-items: center; margin-top: var(--s3); }
+  .topbar-row { flex-direction: column; }
+}
+
+/* --- Calendario por dias. La fila del dia separa sin una tabla por dia, y lo
+   pasado se apaga: lo que importa es lo que queda por salir. --- */
+.calendario table td,
+.calendario table th { padding-top: var(--s2); padding-bottom: var(--s2); }
+.cal-dia td {
+  padding-top: var(--s4) !important;
+  font-weight: 800;
+  font-size: var(--fs-head);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--panel-soft);
+}
+.cal-hoy { color: var(--accent); }
+.cal-pasado td { opacity: 0.45; }
+.cal-siguiente td { background: var(--surface-hover); }
+.cal-evento { font-weight: 600; }
+
+/* --- Compare: cada venue con su color. Pedido expresamente: es la unica
+   pantalla donde el color no es un estado sino una identidad, y por eso los
+   dos colores no son ni el verde ni el rojo ni el ambar del sistema. --- */
+/* Azul y verde azulado: de la misma familia fria que el resto de la
+   plataforma (el naranja rompia demasiado) y aun asi distinguibles, sobre
+   todo con el fondo de columna. Cada columna lleva un fondo suave de su
+   color y la cifra que gana, el color entero. */
+.oi-pantalla {
+  --venue-a: #5b9cf0;
+  --venue-b: #3fbfb0;
+  --venue-a-fondo: rgba(91, 156, 240, 0.14);
+  --venue-b-fondo: rgba(63, 191, 176, 0.14);
+  --venue-a-fuerte: rgba(91, 156, 240, 0.28);
+  --venue-b-fuerte: rgba(63, 191, 176, 0.28);
+}
+
+.cmp-cabecera {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--s4);
+  flex-wrap: wrap;
+}
+.cmp-lado { display: flex; align-items: center; gap: var(--s4); }
+.cmp-vs { color: var(--text-faint); font-size: 18px; font-weight: 700; }
+
+.cmp-venue {
+  min-width: 180px;
+  padding: var(--s2) var(--s4);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--surface);
+  border: var(--rule) solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+}
+.cmp-venue:hover { background: var(--surface-hover); }
+.cmp-flecha { font-size: 14px; color: var(--text-faint); }
+
+/* En el selector el color es solo una linea fina debajo del nombre. */
+.cmp-venue.cmp-a { color: var(--text); box-shadow: inset 0 -2px 0 var(--venue-a); }
+.cmp-venue.cmp-b { color: var(--text); box-shadow: inset 0 -2px 0 var(--venue-b); }
+
+.cmp-a { color: var(--venue-a); }
+.cmp-b { color: var(--venue-b); }
+
+.cmp-tabla .cmp-col-a { background: var(--venue-a-fondo); }
+.cmp-tabla .cmp-col-b { background: var(--venue-b-fondo); }
+.cmp-tabla th.cmp-col-a { background: var(--venue-a-fuerte); color: var(--venue-a); }
+.cmp-tabla th.cmp-col-b { background: var(--venue-b-fuerte); color: var(--venue-b); }
+.cmp-tabla td.cmp-col-a.cmp-gana { background: var(--venue-a-fuerte); color: var(--venue-a); font-weight: 800; }
+.cmp-tabla td.cmp-col-b.cmp-gana { background: var(--venue-b-fuerte); color: var(--venue-b); font-weight: 800; }
+
+.cmp-tabla thead th {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+.cmp-tabla tbody td { font-size: 15px; padding-top: var(--s3); padding-bottom: var(--s3); }
+.cmp-tabla tbody td.asset { font-weight: 700; }
+.cmp-tabla td.ratio-col { font-weight: 600; }
+
+/* Minimalista: sin cajas de fondo salvo las dos columnas de color. La metrica
+   y el ratio van sobre el fondo de la tabla, y lo que separa es la linea. */
+.cmp-tabla tbody td:first-child,
+.cmp-tabla thead th:first-child,
+.cmp-tabla thead th.ratio-col { background: var(--surface); }
+
+/* Las cuatro columnas separadas por la misma linea gruesa, tambien entre los
+   dos venues, que antes iban pegados. Las filas, con una fina. */
+.cmp-tabla thead th + th,
+.cmp-tabla tbody td + td { border-left: var(--rule-strong) solid var(--border-strong); }
+.cmp-tabla tbody td { border-bottom-color: var(--border); }
+
+/* Al pasar por encima se aclara la fila entera, color incluido: un fondo
+   encima del de la columna lo taparia. */
+.cmp-tabla tbody tr:hover td { box-shadow: inset 0 0 0 999px rgba(255, 255, 255, 0.04); }
+
+/* Fila elegida del escaner de Parity: la que alimenta el simulador. */
+.fila-elegida td { background: var(--surface-hover); }
+.fila-elegida td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+
+/* --- Navegacion y controles, iguales en todas las areas. Van al final para
+   mandar sobre las reglas de arriba sin tocarlas una a una. --- */
+
+/* El nombre del area, mas grande y mas separado de las pestanas. */
+.topbar { gap: var(--s6); }
+.brand { font-size: 26px; font-weight: 800; }
+
+/* El menu principal es lo primero que se lee: algo mas grande, en negrita y
+   con mas contraste que antes. */
+.tab {
+  padding: var(--s3) var(--s5);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  opacity: 0.72;
+}
+.tab:hover { opacity: 1; text-decoration: none; }
+.tab-active { opacity: 1; }
+
+/* La banda de controles de cada seccion: rotulos en negrita y en blanco, y
+   botones y campos un punto mas grandes. */
+.controls { padding: var(--s5) var(--s6); }
+.controls .label,
+.control-group > .label {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: 0.1em;
+}
+.seg {
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 800;
+}
+.controls input,
+.controls select { font-size: 15px; font-weight: 600; }
+
+/* Los desplegables, con la misma letra. */
+.menu-item { font-size: 15px; }
+.menu-item-on .menu-label { font-weight: 700; }
+
+/* Rejilla de comisiones propias en Parity: un campo por venue, centrados. */
+.comisiones-rejilla {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s3) var(--s4);
+}
+.comisiones-rejilla input { width: 90px; text-align: center; }
+.parity-nota { text-align: center; font-size: var(--fs-label); margin-top: var(--s2); }
+
+/* Enlace a la web oficial junto a cada venue de Compare. */
+.cmp-enlace { font-size: 18px; color: var(--text-dim); }
+.cmp-enlace:hover { color: var(--text); text-decoration: none; }
+
+/* --- Terminal con la disposicion de Hyperliquid --- */
+
+/* El par manda en la barra: en grande, a la izquierda, y abre el selector. */
+.terminal-barra { justify-content: flex-start; align-items: center; }
+.terminal-par-anclaje { position: relative; margin-right: var(--s4); }
+.terminal-par { display: flex; align-items: center; gap: var(--s2); }
+.terminal-par-boton {
+  padding: var(--s1) var(--s2);
+  border: none;
+  background: none;
+  color: var(--text);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+.terminal-par-boton:hover { background: var(--surface-hover); }
+.terminal-par-flecha { font-size: 14px; color: var(--text-faint); }
+
+/* El selector: un panel ancho bajo el par con buscador, pestanas y la tabla
+   de todos los mercados, ordenable. */
+.terminal-selector {
+  position: absolute;
+  top: calc(100% + var(--s2));
+  left: 0;
+  z-index: 30;
+  width: min(880px, 94vw);
+  max-height: 72vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  padding: var(--s3);
+  border: var(--rule-strong) solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+}
+.terminal-selector-buscar { width: 100%; font-size: 15px; }
+.terminal-selector-pestanas { display: flex; gap: var(--s2); }
+.terminal-selector-pestanas button,
+.terminal-pestanas button {
+  padding: var(--s2) var(--s4);
+  border: none;
+  border-bottom: var(--rule-strong) solid transparent;
+  background: none;
+  color: var(--text-dim);
+  font-weight: 800;
+  cursor: pointer;
+}
+.terminal-selector-pestanas button.active,
+.terminal-pestanas button.active { color: var(--text); border-bottom-color: var(--accent); }
+.terminal-selector-tabla { overflow-y: auto; }
+.terminal-selector-tabla table { font-size: 14px; }
+.terminal-selector-tabla th { position: sticky; top: 0; z-index: 1; }
+.terminal-selector-tabla td { padding: var(--s2) var(--s3); }
+
+/* Grafico a la izquierda y libro en columna a la derecha. */
+.terminal-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: var(--s4);
+  align-items: start;
+}
+.terminal-grafico { min-width: 0; display: flex; flex-direction: column; gap: var(--s3); }
+.terminal-grid .terminal-book {
+  padding-left: var(--s4);
+  border-left: var(--rule) solid var(--border);
+}
+@media (max-width: 1000px) {
+  .terminal-grid { grid-template-columns: minmax(0, 1fr); }
+  .terminal-grid .terminal-book { padding-left: 0; border-left: none; }
+}
+
+/* Pestanas de abajo, como las de Hyperliquid. */
+.terminal-pestanas {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-bottom: var(--s3);
+  border-bottom: var(--rule) solid var(--border);
+}
+
+/* Open Interest: avisos en una linea, movers en dos tablas lado a lado. */
+.oi-avisos { text-align: center; font-size: var(--fs-label); }
+.oi-avisos span[title] { cursor: help; }
+.oi-top { font-size: var(--fs-label); }
+.oi-movers { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--s4); }
+
+/* Parity: cada pata es un bloque con su fondo, comprar en verde y vender en
+   rojo. Fondos suaves para que se lea limpio; lo que separa son lineas
+   gruesas entre bloques y finas entre filas. */
+.parity-tabla .pack-buy { background: rgba(63, 185, 80, 0.06); }
+.parity-tabla .pack-sell { background: rgba(248, 81, 73, 0.06); }
+
+/* Cada columna con su linea fina; entre bloques, gruesa. */
+.parity-tabla th,
+.parity-tabla td { border-right: none; border-left: var(--rule) solid var(--border-strong); }
+.parity-tabla thead tr:first-child th:first-child,
+.parity-tabla tbody td:first-child { border-left: none; }
+.parity-tabla thead tr:first-child th.pack-buy,
+.parity-tabla thead tr:nth-child(2) th.pack-buy:first-child,
+.parity-tabla td.pack-buy:nth-child(2),
+.parity-tabla thead tr:first-child th.pack-sell,
+.parity-tabla thead tr:nth-child(2) th.pack-sell:nth-child(4),
+.parity-tabla td.pack-sell:nth-child(5),
+.parity-tabla th.col-gap,
+.parity-tabla td.col-gap { border-left: var(--rule-head) solid var(--border-strong); }
+.parity-tabla tbody td { border-bottom: var(--rule) solid var(--border-strong); }
+
+/* La cabecera se separa de los activos: fondo de cabecera tambien en los
+   bloques (el tinte va encima, no en su lugar) y un corte mas grueso y claro
+   justo donde empiezan las filas. */
+.parity-tabla thead th { background: var(--panel); }
+.parity-tabla thead th.pack-buy { background: linear-gradient(rgba(63, 185, 80, 0.12), rgba(63, 185, 80, 0.12)), var(--panel); }
+.parity-tabla thead th.pack-sell { background: linear-gradient(rgba(248, 81, 73, 0.12), rgba(248, 81, 73, 0.12)), var(--panel); }
+.parity-tabla thead tr:nth-child(2) th,
+.parity-tabla thead th[rowspan] { border-bottom: 4px solid var(--text-faint); }
+
+/* Titulos, subtitulos y filas mas grandes. */
+.parity-tabla thead tr:first-child th { font-size: 17px; letter-spacing: 0.12em; }
+.parity-tabla thead tr:nth-child(2) th { font-size: 14px; }
+.parity-tabla thead tr:first-child th.pack-buy { color: var(--pos); }
+.parity-tabla thead tr:first-child th.pack-sell { color: var(--neg); }
+.parity-tabla tbody td { font-size: 15px; }
+.parity-tabla tbody td.asset { font-size: 17px; font-weight: 800; }
+.parity-tabla tbody td.pack-buy a,
+.parity-tabla tbody td.pack-sell a { font-size: 15px; font-weight: 700; }
+
+/* Comision y spread legibles, no en gris. */
+.parity-tabla td.pack-costes { color: var(--text); font-weight: 600; }
+
+/* Lo que se viene a mirar: gap, neto y funding, mas grandes y en negrita. */
+.parity-tabla th.col-resultado { font-size: 17px; }
+.parity-tabla td.col-resultado { font-size: 18px; font-weight: 800; }
+
+/* Terminal con los mercados de Hyperliquid: sus etiquetas de apalancamiento y
+   de dex HIP-3, discretas y en el tono de la app (el color es estado, y una
+   etiqueta no lo es). El selector es mas ancho para que quepan. */
+.hl-etiqueta {
+  display: inline-block;
+  margin-left: var(--s1);
+  padding: 0 var(--s1);
+  border: var(--rule) solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.6;
+  vertical-align: middle;
+}
+.terminal-par .hl-etiqueta { font-size: 13px; }
+.hl-mercado { white-space: nowrap; }
+.terminal-selector { width: min(1040px, 96vw); }
+.terminal-selector-pestanas { flex-wrap: wrap; justify-content: center; }
+.terminal-pestanas-libro { width: 100%; margin-bottom: 0; }
+.terminal-cinta { width: 100%; max-height: 640px; overflow-y: auto; }
+.terminal-cinta table { font-size: 12px; width: 100%; }
+.terminal-cinta td, .terminal-cinta th { padding: 1px var(--s2); }
+.book-spread td { color: var(--text-dim); font-weight: 700; }
+/* La barra lleva su propia capa por encima del grafico: el lienzo del grafico
+   crea la suya y el selector, que cuelga de la barra, quedaba debajo. */
+.terminal-barra { position: relative; z-index: 40; }
+
+/* Pantallas hechas de varios bloques (Points, Bridges, Parity...): el mismo
+   aire entre bloques que en Open Interest, para que se vea donde acaba uno. */
+.bloques { display: flex; flex-direction: column; gap: var(--s7); min-width: 0; }
+
+/* Los avisos sueltos de un bloque ("Nothing on the board yet", "Loading…")
+   van centrados como todo lo demas. */
+.bloque > p, .oi-bloque > p { text-align: center; }
+
+/* Tracker: todo centrado, como el resto de la app. Las filas de un panel se
+   centran en su hueco y los avisos sueltos tambien. */
+.trader-row { justify-content: center; }
+.trader-panel > p, .trader-panel .trader-empty { text-align: center; }
+.oi-copiar { display: flex; justify-content: center; align-items: center; gap: var(--s3); }
+/* El detalle de un aviso de datos es una frase larga: con el ancho de
+   `.reason` cada fila ocupaba cinco lineas. */
+.detalle-hallazgo { max-width: 90ch; white-space: normal; }
+/* El "Loading…" de arriba del todo, centrado como el resto. */
+.carga-inicial { text-align: center; margin-top: 30vh; }
+
+/* --- Terminal: recuadros marcados y redondeados ---
+   Cada parte en su caja: la barra del mercado, cada cifra, el grafico, el
+   libro y las pestanas de abajo. Borde grueso y esquinas redondas en todas,
+   para que se vea donde empieza y acaba cada cosa. */
+.terminal-principal { gap: var(--s4); border-radius: var(--radius-lg); }
+.terminal-principal ~ .trader-panel { border-radius: var(--radius-lg); }
+
+.terminal-barra {
+  justify-content: center;
+  align-items: stretch;
+  gap: var(--s3);
+  padding: var(--s4);
+  border: var(--rule-strong) solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--panel-soft);
+}
+.terminal-par {
+  padding: var(--s2) var(--s4);
+  border: var(--rule-strong) solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  height: 100%;
+}
+.terminal-par .hl-etiqueta { font-size: 13px; padding: 1px var(--s2); }
+
+/* Las cifras del mercado: cada una en su caja, el rotulo en letra normal y
+   mas grande que el de las tablas, y la cifra grande debajo. */
+.terminal-barra .stat {
+  flex: 0 1 auto;
+  min-width: 9.5rem;
+  padding: var(--s2) var(--s4);
+  border: var(--rule-strong) solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.terminal-barra .stat .label {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  color: var(--text-dim);
+}
+.terminal-barra .stat-value { font-size: 22px; font-weight: 700; margin-top: var(--s1); }
+
+/* Grafico y libro, cada uno en su caja. */
+.terminal-grafico {
+  padding: var(--s3);
+  border: var(--rule-strong) solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.terminal-grid .terminal-book {
+  padding: var(--s3);
+  border: var(--rule-strong) solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.terminal-book table, .terminal-cinta table { border-radius: var(--radius); overflow: hidden; }
+.candle-wrap { border-radius: var(--radius); overflow: hidden; }
+.terminal-intervals button, .terminal-chip { border-radius: var(--radius); }
+
+/* El selector: tabla con esquinas redondas y las etiquetas en columna. */
+.terminal-selector-tabla { border: var(--rule-strong) solid var(--border-strong); border-radius: var(--radius-lg); }
+.terminal-selector-tabla table { border: none; }
+.hl-celda {
+  display: inline-grid;
+  grid-template-columns: 9.5rem 3.2rem 3.2rem;
+  align-items: center;
+  column-gap: var(--s2);
+}
+.hl-nombre { text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hl-hueco { display: flex; justify-content: flex-start; }
+.hl-hueco .hl-etiqueta { margin-left: 0; min-width: 3rem; text-align: center; }
+
+/* Menu Style del grafico. */
+.terminal-estilo {
+  position: absolute;
+  top: calc(100% + var(--s2));
+  right: 0;
+  z-index: 35;
+  width: min(460px, 92vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s4);
+  border: var(--rule-strong) solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+}
+.terminal-muestras { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s2); margin-bottom: var(--s2); }
+.terminal-muestras button, .terminal-color {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  padding: var(--s1) var(--s3);
+  border: var(--rule) solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--panel-soft);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+}
+.terminal-muestras button.active { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.terminal-muestra {
+  width: 14px;
+  height: 14px;
+  border: var(--rule) solid var(--border-strong);
+  border-radius: 50%;
+  display: inline-block;
+}
+.terminal-estilo .terminal-color input[type="color"] { width: 22px; height: 22px; min-height: 0; min-width: 0; padding: 0; border: none; border-radius: 50%; background: none; cursor: pointer; }
+
+/* Con fondo claro, la leyenda del grafico en oscuro. */
+.candle-claro .candle-legend { color: #111827; }
+.candle-claro .candle-legend .candle-legend-k { color: #4b5563; }
+.terminal-estilo .terminal-color { flex-direction: row; }
+.candle-claro .candle-legend .candle-legend-titulo { color: #111827; }
+/* Con las etiquetas en columna la tabla es mas ancha: el selector crece. */
+.terminal-selector { width: min(1180px, 96vw); }
+
+/* Portada: el panel de datos va bajo la franja de arriba, pegado a la esquina
+   derecha, y ya no flota encima de ella. */
+.portada-datos { display: flex; justify-content: flex-end; padding: var(--s4) var(--s5) 0; }
+.portada-datos .panel-datos { position: static; }
+@media (max-width: 760px) {
+  .portada-datos { justify-content: center; }
+}

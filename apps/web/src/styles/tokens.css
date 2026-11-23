@@ -1,0 +1,378 @@
+/*
+ * Tokens del sistema de diseno. Se definen UNA vez y no se repiten valores
+ * sueltos en los componentes. Si un componente necesita un color que no esta
+ * aqui, casi siempre es que el diseno esta mal, no que falte un token.
+ *
+ * Ver DESIGN.md. Resumen: densidad de terminal, no de landing page. El color
+ * solo significa estado.
+ */
+
+:root {
+  /* --- Superficies. Un solo nivel por encima del fondo, nada de tarjetas
+     dentro de tarjetas dentro de paneles.
+
+     La paleta es la de Variational, tomada de su propia interfaz: el fondo no
+     es un gris neutro sino un negro azulado, y las superficies suben hacia el
+     azul pizarra en vez de hacia el gris. --- */
+  --bg: #010612;
+  --surface: #0b101b;
+  --surface-hover: #151a25;
+  /* La raya entre filas tiene que VERSE: con el borde antiguo la tabla era una
+     mancha continua. Y la gruesa, la que separa cabecera, columna principal y
+     el borde exterior, es la que da la forma. */
+  --border: #232f42;
+  --border-strong: #46566d;
+
+  /* Grosores. Una sola escala para que todas las tablas se corten igual. */
+  --rule: 1px;
+  --rule-strong: 2px;
+  --rule-head: 3px;
+
+  /* Cabecera de tabla y columna que identifica la fila. Es el escalon que
+     separa lo que manda de lo que se lee, sin usar color de estado. */
+  --panel: #1f2938;
+  --panel-soft: #121a29;
+
+  /* --- Texto. La jerarquia se hace con contraste, no con seis tamanos. --- */
+  --text: #e5e7eb;
+  --text-dim: #a0aec0;
+  --text-faint: #55677c;
+
+  /* --- Color. Verde, ambar y rojo estan RESERVADOS para estado y para el
+     signo de un numero. Un solo acento para lo interactivo. --- */
+  --accent: #4c9af8;
+  --ok: #3fb950;
+  --warn: #d29922;
+  --bad: #f85149;
+
+  --pos: var(--ok);
+  --neg: var(--bad);
+
+  /* --- Espaciado. Escala corta a proposito. --- */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+
+  /* --- Tipografia.
+
+     El texto va en una sans del sistema, que se lee mucho mejor que la
+     monoespaciada a tamano pequeno, y las CIFRAS siguen en monoespaciada
+     porque son lo que tiene que alinearse columna a columna. Es la misma
+     division que hace Variational.
+
+     Nada baja de 12 px: los rotulos de 10 y 11 px no se leian. --- */
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
+  --fs-data: 14px;
+  --fs-label: 12px;
+  /* Cabecera de tabla y columna principal: mandan, y se nota en el tamano. */
+  --fs-head: 13px;
+  --lh: 1.5;
+
+  /* --- Radios. Escala corta, como la de espaciado, y por el mismo motivo:
+     con un valor suelto por componente la app acaba con cinco esquinas
+     distintas y ninguna a proposito.
+
+     Tres y no uno porque el radio tiene que ir con el tamano de la caja. Una
+     insignia de doce pixeles de alto con el radio de un panel se convierte en
+     una pildora, y un panel de cuatrocientos con el radio de una insignia
+     parece cortado a cuchillo. --- */
+
+  /* Insignias, barras de progreso, etiquetas dentro de una celda. */
+  --radius-sm: 3px;
+  /* El de siempre: botones, campos, tablas y recuadros normales. */
+  --radius: 6px;
+  /* Superficies grandes: la lista de mercados, las tarjetas de la portada. */
+  --radius-lg: 10px;
+}
+
+/*
+ * El tema oscuro es el unico que se define: es donde se va a usar esto. Si
+ * algun dia hace falta claro, se redefinen estos tokens y nada mas.
+ */
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--fs-data);
+  line-height: var(--lh);
+  /* Sin suavizado agresivo: el texto denso se lee mejor nitido. */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sin animaciones de entrada. Lo unico que se anima es la respuesta directa a
+   una accion del usuario, y por debajo de 150 ms. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* --- Etiquetas: mayusculas pequenas y bajo contraste. Los datos van en alto
+   contraste. Esa es toda la jerarquia. --- */
+.label {
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+/* --- Numeros: alineados a la derecha y con anchura tabular para que las cifras
+   comparables se alineen por la coma. --- */
+.num, code, .mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+
+/* Dato desconocido. NUNCA 0, nunca una casilla vacia. */
+.none { color: var(--text-faint); }
+
+/* --- Tablas: la unidad por defecto de esta app. --- */
+.table-wrap {
+  /* La tabla hace scroll dentro de su contenedor; la pagina nunca. */
+  overflow-x: auto;
+  border: var(--rule-strong) solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-data);
+}
+
+/* La fila de arriba manda: fondo propio, texto en alto contraste y un corte
+   grueso por debajo. Antes iba en el mismo color que el cuerpo y con el texto
+   apagado, asi que la cabecera pesaba menos que los datos. */
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--panel);
+  border-bottom: var(--rule-head) solid var(--border-strong);
+  padding: var(--s4) var(--s4);
+  text-align: center;
+  font-size: var(--fs-head);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+thead th.num { text-align: center; }
+
+/* Filas con aire. Los datos densos no se leen mas rapido por estar pegados:
+   se leen peor, y un renglon que se mete en el de abajo se lee mal del todo. */
+tbody td {
+  padding: var(--s3) var(--s4);
+  border-bottom: var(--rule) solid var(--border);
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Las cifras van centradas como todo lo demas. Siguen con anchura tabular,
+   que es lo que las mantiene comparables de una fila a otra. */
+td.num { text-align: center; }
+
+tbody tr:last-child td { border-bottom: none; }
+
+/* --- La primera columna es el otro eje que manda. Se le da fondo propio y un
+   corte a la derecha, como a la cabecera: asi la tabla tiene una L marcada y
+   se sigue una fila larga sin perderla. Va por columna y no por clase para que
+   valga en las tablas cuya primera celda es un numero de orden o una estrella,
+   que hacen de cuneta. --- */
+tbody td:first-child {
+  background: var(--panel-soft);
+  border-right: var(--rule-strong) solid var(--border-strong);
+}
+
+thead th:first-child { border-right: var(--rule-strong) solid var(--border-strong); }
+
+/* La celda que NOMBRA la fila, este donde este: mas grande y mas gruesa que
+   el resto de la fila, como la cabecera lo es de su columna. */
+td.asset, td.symbol-cell {
+  color: var(--text);
+  font-weight: 800;
+  font-size: var(--fs-head);
+  letter-spacing: 0.02em;
+}
+
+/* Si ademas es la segunda columna, arrastra la cuneta hasta ella: en el
+   screener la primera celda es la estrella y el simbolo va detras. */
+tbody td:first-child + td.symbol-cell {
+  background: var(--panel-soft);
+  border-right: var(--rule-strong) solid var(--border-strong);
+}
+
+/* El subrayado de la fila entera manda sobre el fondo de la columna: si no,
+   al pasar por encima la primera celda se quedaba sin resaltar. */
+tbody tr:hover td { background: var(--surface-hover); }
+
+/* --- Semaforo. El color NUNCA va solo: siempre lleva texto al lado, porque el
+   daltonismo rojo-verde es justo el que rompe un semaforo. --- */
+.light {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  white-space: nowrap;
+}
+
+.light::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--text-faint);
+}
+
+.light-green::before { background: var(--ok); }
+.light-yellow::before { background: var(--warn); }
+.light-red::before { background: var(--bad); }
+
+.light-green { color: var(--ok); }
+.light-yellow { color: var(--warn); }
+.light-red { color: var(--bad); }
+
+/* --- Marca de dato estimado. Un calculo presentado como medida es una mentira
+   aunque el calculo sea correcto. --- */
+.estimated {
+  font-size: var(--fs-label);
+  color: var(--warn);
+  border: 1px solid var(--warn);
+  border-radius: var(--radius);
+  padding: 0 var(--s1);
+  margin-left: var(--s2);
+  opacity: 0.8;
+}
+
+/* --- Aviso de degradacion dentro de una pantalla. Si una tabla esta
+   incompleta, lo dice esa tabla, no solo Data Sources. --- */
+.degraded-note {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s2) var(--s3);
+  margin-bottom: var(--s3);
+  border: 1px solid var(--warn);
+  border-radius: var(--radius);
+  color: var(--warn);
+  font-size: var(--fs-label);
+}
+
+.degraded-note a { color: inherit; }
+
+/* --- Interactivo: un solo acento. --- */
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button, select, input {
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  /* Controles con cuerpo: los de 4 px de alto se tocaban entre si y eran
+     dificiles de acertar. */
+  padding: var(--s2) var(--s3);
+  min-height: 36px;
+}
+
+button { cursor: pointer; }
+button:hover { background: var(--surface-hover); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* --- Screener de funding. Fondo tenue en la celda del largo y la del corto:
+   es estado (donde abrir cada pata), no decoracion. --- */
+:root {
+  --long-bg: rgba(63, 185, 80, 0.10);
+  --short-bg: rgba(248, 81, 73, 0.10);
+}
+
+/* --- Botones y desplegables: la caja se tiene que ver ---
+   Antes el borde era del mismo tono que el fondo de la tabla y los botones se
+   leian como texto suelto. Y el select traia la flecha del sistema, que cada
+   navegador coloca donde quiere y se pegaba al texto. */
+
+button,
+select,
+input {
+  border-color: var(--border-strong);
+}
+
+button:hover,
+select:hover,
+input:hover {
+  border-color: var(--text-faint);
+}
+
+/* La flecha, dibujada por nosotros y SIEMPRE en el mismo sitio: dos trazos a
+   16 px del borde derecho, con hueco reservado para que nunca pise al texto. */
+select {
+  appearance: none;
+  padding-right: var(--s6);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--text-dim) 50%),
+    linear-gradient(135deg, var(--text-dim) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% + 2px),
+    calc(100% - 13px) calc(50% + 2px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  text-align: center;
+  /* El texto centrado necesita hueco simetrico, o el rotulo baila al cambiar
+     de opcion. */
+  padding-left: var(--s6);
+}
+
+select:focus { outline-offset: 1px; }
+
+/* --- Centrado y simetria ---
+   Todo va centrado respecto a la pagina, y eso manda sobre el resto. Aqui
+   se aplica a lo que se escapaba: los bloques de
+   tabla estrechos y las tarjetas de cifras. */
+
+.table-wrap { margin-inline: auto; }
+
+.stats {
+  margin-inline: auto;
+  width: 100%;
+}
+
+.stat { min-width: 0; }
+
+/* Una celda con enlace hereda el centrado de la tabla; sin esto el enlace se
+   quedaba pegado a la izquierda dentro de su celda. */
+td > a { display: inline-block; }
+
+/* Fuente local en negrita para los ejes del canvas. */
+@font-face {
+  font-family: ChartAxisBold;
+  src: local("Consolas Bold"), local("Cascadia Mono Bold"), local("Arial Bold");
+  font-weight: 400;
+}

@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.next/
+*.tsbuildinfo
+
+# Secretos: nunca en el repo. Los .env reales viven fuera del proyecto.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.keystore
+
+# Datos locales (series temporales, cache de venues)
+data/
+*.db
+*.db-journal
+*.db-wal
+logs/
+
+data/backups/

@@ -1,0 +1,14 @@
+{
+  "name": "@defi/collector",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@defi/core": "*",
+    "@defi/venues": "*",
+    "@defi/validation": "*"
+  }
+}

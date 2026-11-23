@@ -1,0 +1,7 @@
+# El destino de despliegue es Linux (Raspberry Pi). Los finales de linea se
+# normalizan a LF en el repositorio: un script o una unidad systemd con CRLF
+# falla en la Pi de forma poco obvia.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.ico binary
